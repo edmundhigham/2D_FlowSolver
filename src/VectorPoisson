@@ -1,0 +1,469 @@
+!                    _____________________________________________________________ 
+!                   |    |    |                                         |    |    |
+!                   | BC | BC |                    BC                   | BC | BC |
+!                   |____|____|_________________________________________|____|____|
+!                   |    |    |                                         |    |    |
+!                   | BC | bb |                    ab                   | bb | BC |
+!                   |____|____|_________________________________________|____|____|
+!                   |    |    |                                         |    |    |
+!                   |    |    |                                         |    |    |
+!                   |    |    |                                         |    |    |
+!                   |    |    |                                         |    |    |
+!                   |    |    |                                         |    |    |
+!                   |    |    |                                         |    |    |
+!                   | BC | ba |                    aa                   | ba | BC |
+!                   |    |    |                                         |    |    |
+!                   |    |    |                                         |    |    |
+!                   |    |    |                                         |    |    |
+!                   |    |    |                                         |    |    |
+!   Column          |    |    |                                         |    |    |
+!   Eta             |____|____|_________________________________________|____|____|
+!   ^               |    |    |                                         |    |    |
+!   |               | BC | bb |                    ab                   | bb | BC |
+!   |               |____|____|_________________________________________|____|____|
+!   |               |    |    |                                         |    |    |
+!   |               | BC | BC |                    BC                   | BC | BC |
+!   *------> Xi     |____|____|_________________________________________|____|____|
+!            Row    
+
+! Column 2 ========================================================================= !
+
+! Region (6) Forward Off-Centre Xi, Forward Off-Centre Eta
+    i = 2
+    j = 2
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i-1,j)+b2(2)*psiTemp(i+1,j)                + &
+         b2(3)*psiTemp(i+2,j)+b2(4)*psiTemp(i+3,j)                + &
+         b2(5)*psiTemp(i+4,j))*r1_dXisq                           + &
+!
+        (b2(1)*psiTemp(i,j-1)+b2(2)*psiTemp(i,j+1)                + &
+         b2(3)*psiTemp(i,j+2)+b2(4)*psiTemp(i,j+3)                + &
+         b2(5)*psiTemp(i,j+4))*r1_dEtasq
+            
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + & 
+        r3_2*r1_dEtasq)
+
+ do i = 3,(nXi-6),4
+            
+    psiTemp(i,j) = omega(i,j) + &
+!
+        (a2(1)*psiTemp(i-2,j)+a2(2)*psiTemp(i-1,j)                + &
+         a2(3)*psiTemp(i+1,j)+a2(4)*psiTemp(i+2,j))*r1_dXisq      + &
+!
+        (b2(1)*psiTemp(i,j-1)+b2(2)*psiTemp(i,j+1)                + &
+         b2(3)*psiTemp(i,j+2)+b2(4)*psiTemp(i,j+3)                + &
+         b2(5)*psiTemp(i,j+4))*r1_Detasq
+            
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(3.0_wp*r1_dXisq + &
+            r3_2*r1_dEtasq)
+!====================================================================
+    psiTemp(i+1,j) = omega(i+1,j) + &
+!
+        (a2(1)*psiTemp(i-1,j)+a2(2)*psiTemp(i  ,j)                + &
+         a2(3)*psiTemp(i+2,j)+a2(4)*psiTemp(i+3,j))*r1_dXisq      + &
+!
+        (b2(1)*psiTemp(i+1,j-1)+b2(2)*psiTemp(i+1,j+1)            + &
+         b2(3)*psiTemp(i+1,j+2)+b2(4)*psiTemp(i+1,j+3)            + &
+         b2(5)*psiTemp(i+1,j+4))*r1_Detasq
+            
+    psiTemp(i+1,j) = r6_5*psiTemp(i+1,j)/(3.0_wp*r1_dXisq + &
+            r3_2*r1_dEtasq)
+!====================================================================
+    psiTemp(i+2,j) = omega(i+2,j) + &
+!
+        (a2(1)*psiTemp(i  ,j)+a2(2)*psiTemp(i+1,j)                + &
+         a2(3)*psiTemp(i+3,j)+a2(4)*psiTemp(i+4,j))*r1_dXisq      + &
+!
+        (b2(1)*psiTemp(i+2,j-1)+b2(2)*psiTemp(i+2,j+1)            + &
+         b2(3)*psiTemp(i+2,j+2)+b2(4)*psiTemp(i+2,j+3)            + &
+         b2(5)*psiTemp(i+2,j+4))*r1_Detasq
+            
+    psiTemp(i+2,j) = r6_5*psiTemp(i+2,j)/(3.0_wp*r1_dXisq + &
+            r3_2*r1_dEtasq)
+!====================================================================
+    psiTemp(i+3,j) = omega(i+3,j) + &
+!
+        (a2(1)*psiTemp(i+1,j)+a2(2)*psiTemp(i+2,j)                + &
+         a2(3)*psiTemp(i+4,j)+a2(4)*psiTemp(i+5,j))*r1_dXisq      + &
+!
+        (b2(1)*psiTemp(i+3,j-1)+b2(2)*psiTemp(i+3,j+1)            + &
+         b2(3)*psiTemp(i+3,j+2)+b2(4)*psiTemp(i+3,j+3)            + &
+         b2(5)*psiTemp(i+3,j+4))*r1_Detasq
+            
+    psiTemp(i+3,j) = r6_5*psiTemp(i+3,j)/(3.0_wp*r1_dXisq + &
+            r3_2*r1_dEtasq)                     
+
+ end do
+
+    i = nXi-2
+
+    psiTemp(i,j) = omega(i,j) + &
+!
+        (a2(1)*psiTemp(i-2,j)+a2(2)*psiTemp(i-1,j)                + &
+         a2(3)*psiTemp(i+1,j)+a2(4)*psiTemp(i+2,j))*r1_dXisq      + &
+!
+        (b2(1)*psiTemp(i,j-1)+b2(2)*psiTemp(i,j+1)                + &
+         b2(3)*psiTemp(i,j+2)+b2(4)*psiTemp(i,j+3)                + &
+         b2(5)*psiTemp(i,j+4))*r1_Detasq
+            
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(3.0_wp*r1_dXisq + &
+            r3_2*r1_dEtasq)
+
+    ! Region (4) Backward Off-Centre Xi, Forward Off-Centre Eta
+    i = (nXi-1)
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i+1,j)+b2(2)*psiTemp(i-1,j)               + &
+         b2(3)*psiTemp(i-2,j)+b2(4)*psiTemp(i-3,j)               + &
+         b2(5)*psiTemp(i-4,j))*r1_dXisq                          + &
+!
+        (b2(1)*psiTemp(i,j-1)+b2(2)*psiTemp(i,j+1)               + &
+         b2(3)*psiTemp(i,j+2)+b2(4)*psiTemp(i,j+3)               + &
+         b2(5)*psiTemp(i,j+4))*r1_dEtasq
+
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + &
+        r3_2*r1_dEtasq)
+
+! Relax Line
+!psiTemp(2:(nXi-1),j) = (1.0_wp-alpha)*psi(2:(nXi-1),j) + &
+!                            alpha*psiTemp(2:(nXi-1),j)
+
+! Central Columns ============================================================ !
+
+
+do j = 3,(nEta-2)
+ 
+    i = 2
+
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i-1,j)+b2(2)*psiTemp(i+1,j)                 + &
+         b2(3)*psiTemp(i+2,j)+b2(4)*psiTemp(i+3,j)                 + &
+         b2(5)*psiTemp(i+4,j))*r1_dXisq                            + &
+!
+        (a2(1)*psiTemp(i,j-2)+a2(2)*psiTemp(i,j-1)                 + &
+         a2(3)*psiTemp(i,j+1)+a2(4)*psiTemp(i,j+2))*r1_dEtasq
+
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + &
+        3.0_wp*r1_dEtasq)
+            
+    do i = 3,(nXi-6),4
+          
+    psiTemp(i,j) = omega(i,j) + &
+        (a2(1)*psiTemp(i-2,j)+a2(2)*psiTemp(i-1,j)                + &
+         a2(3)*psiTemp(i+1,j)+a2(4)*psiTemp(i+2,j))*r1_dXisq      + &
+!
+        (a2(1)*psiTemp(i,j-2)+a2(2)*psiTemp(i,j-1)                + &
+         a2(3)*psiTemp(i,j+1)+a2(4)*psiTemp(i,j+2))*r1_dEtasq
+
+    psiTemp(i,j) = r2_5*psiTemp(i,j)/(r1_dXisq + r1_dEtasq)
+!====================================================================
+    psiTemp(i+1,j) = omega(i+1,j) + &
+        (a2(1)*psiTemp(i-1,j)+a2(2)*psiTemp(i  ,j)                + &
+         a2(3)*psiTemp(i+2,j)+a2(4)*psiTemp(i+3,j))*r1_dXisq      + &
+!
+        (a2(1)*psiTemp(i+1,j-2)+a2(2)*psiTemp(i+1,j-1)            + &
+         a2(3)*psiTemp(i+1,j+1)+a2(4)*psiTemp(i+1,j+2))*r1_dEtasq
+
+    psiTemp(i+1,j) = r2_5*psiTemp(i+1,j)/(r1_dXisq + r1_dEtasq)
+!====================================================================
+    psiTemp(i+2,j) = omega(i+2,j) + &
+        (a2(1)*psiTemp(i  ,j)+a2(2)*psiTemp(i+1,j)                + &
+         a2(3)*psiTemp(i+3,j)+a2(4)*psiTemp(i+4,j))*r1_dXisq      + &
+!
+        (a2(1)*psiTemp(i+2,j-2)+a2(2)*psiTemp(i+2,j-1)            + &
+         a2(3)*psiTemp(i+2,j+1)+a2(4)*psiTemp(i+2,j+2))*r1_dEtasq
+
+    psiTemp(i+2,j) = r2_5*psiTemp(i+2,j)/(r1_dXisq + r1_dEtasq)
+!====================================================================
+    psiTemp(i+3,j) = omega(i+3,j) + &
+        (a2(1)*psiTemp(i+1,j)+a2(2)*psiTemp(i+2,j)                + &
+         a2(3)*psiTemp(i+4,j)+a2(4)*psiTemp(i+5,j))*r1_dXisq      + &
+!
+        (a2(1)*psiTemp(i+3,j-2)+a2(2)*psiTemp(i+3,j-1)            + &
+         a2(3)*psiTemp(i+3,j+1)+a2(4)*psiTemp(i+3,j+2))*r1_dEtasq
+
+    psiTemp(i+3,j) = r2_5*psiTemp(i+3,j)/(r1_dXisq + r1_dEtasq)
+            
+    end do
+
+    i = nXi-2
+
+    psiTemp(i,j) = omega(i,j) + &
+        (a2(1)*psiTemp(i-2,j)+a2(2)*psiTemp(i-1,j)                + &
+         a2(3)*psiTemp(i+1,j)+a2(4)*psiTemp(i+2,j))*r1_dXisq      + &
+!
+        (a2(1)*psiTemp(i,j-2)+a2(2)*psiTemp(i,j-1)                + &
+         a2(3)*psiTemp(i,j+1)+a2(4)*psiTemp(i,j+2))*r1_dEtasq
+
+    psiTemp(i,j) = r2_5*psiTemp(i,j)/(r1_dXisq + r1_dEtasq)
+
+    ! Region (3) Backward Off-Centre Xi, Central Eta
+    i = (nXi-1)
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i+1,j)+b2(2)*psiTemp(i-1,j)                 + &
+         b2(3)*psiTemp(i-2,j)+b2(4)*psiTemp(i-3,j)                 + &
+         b2(5)*psiTemp(i-4,j))*r1_dXisq                            + &
+!
+        (a2(1)*psiTemp(i,j-2)+a2(2)*psiTemp(i,j-1)                 + &
+         a2(3)*psiTemp(i,j+1)+a2(4)*psiTemp(i,j+2))*r1_dEtasq                                
+            
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + &
+        3.0_wp*r1_dEtasq)
+
+
+! Relax Line
+!psiTemp(2:(nXi-1),j) = (1.0_wp-alpha)*psi(2:(nXi-1),j) + &
+!                            alpha*psiTemp(2:(nXi-1),j)
+ 
+ end do
+
+
+! Penultimate Column ========================================================
+
+! Region (1) Central Xi, Backward Off-Centre Eta
+       j = (nEta-1)
+    
+    ! Region (8) Forward Off-Centre Xi, Backward Off-Centre Eta
+    i = 2
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i-1,j)+b2(2)*psiTemp(i+1,j)             + &
+         b2(3)*psiTemp(i+2,j)+b2(4)*psiTemp(i+3,j)             + &
+         b2(5)*psiTemp(i+4,j))*r1_dXisq                        + &
+!
+        (b2(1)*psiTemp(i,j+1)+b2(2)*psiTemp(i,j-1)             + &
+         b2(3)*psiTemp(i,j-2)+b2(4)*psiTemp(i,j-3)             + &
+         b2(5)*psiTemp(i,j-4))*r1_dEtasq
+
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + &
+        r3_2*r1_dEtasq)
+
+    do i = 3,(nXi-6),4
+            
+    psiTemp(i,j) = omega(i,j) + &
+!
+        (a2(1)*psiTemp(i-2,j)+a2(2)*psiTemp(i-1,j)             + &
+         a2(3)*psiTemp(i+1,j)+a2(4)*psiTemp(i+2,j))*r1_dXisq   + &
+!
+        (b2(1)*psiTemp(i,j+1)+b2(2)*psiTemp(i,j-1)             + & 
+         b2(3)*psiTemp(i,j-2)+b2(4)*psiTemp(i,j-3)             + &
+         b2(5)*psiTemp(i,j-4))*r1_dEtasq
+
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(3.0_wp*r1_dXisq + &
+                       r3_2*r1_dEtasq)
+!====================================================================            
+    psiTemp(i+1,j) = omega(i+1,j) + &
+!
+        (a2(1)*psiTemp(i-1,j)+a2(2)*psiTemp(i  ,j)             + &
+         a2(3)*psiTemp(i+2,j)+a2(4)*psiTemp(i+3,j))*r1_dXisq   + &
+!
+        (b2(1)*psiTemp(i+1,j+1)+b2(2)*psiTemp(i+1,j-1)         + &
+         b2(3)*psiTemp(i+1,j-2)+b2(4)*psiTemp(i+1,j-3)         + &
+         b2(5)*psiTemp(i+1,j-4))*r1_dEtasq
+
+    psiTemp(i+1,j) = r6_5*psiTemp(i+1,j)/(3.0_wp*r1_dXisq  + &
+                       r3_2*r1_dEtasq)
+!====================================================================
+    psiTemp(i+2,j) = omega(i+2,j) + &
+!
+        (a2(1)*psiTemp(i  ,j)+a2(2)*psiTemp(i+1,j)             + &
+         a2(3)*psiTemp(i+3,j)+a2(4)*psiTemp(i+4,j))*r1_dXisq   + &
+!
+        (b2(1)*psiTemp(i+2,j+1)+b2(2)*psiTemp(i+2,j-1)         + &
+         b2(3)*psiTemp(i+2,j-2)+b2(4)*psiTemp(i+2,j-3)         + &
+         b2(5)*psiTemp(i+2,j-4))*r1_dEtasq
+
+    psiTemp(i+2,j) = r6_5*psiTemp(i+2,j)/(3.0_wp*r1_dXisq  + &
+                       r3_2*r1_dEtasq)      
+!====================================================================
+    psiTemp(i+3,j) = omega(i+3,j) + &
+!
+        (a2(1)*psiTemp(i+1,j)+a2(2)*psiTemp(i+2,j)             + &
+         a2(3)*psiTemp(i+4,j)+a2(4)*psiTemp(i+5,j))*r1_dXisq   + &
+!
+        (b2(1)*psiTemp(i+3,j+1)+b2(2)*psiTemp(i+3,j-1)         + &
+         b2(3)*psiTemp(i+3,j-2)+b2(4)*psiTemp(i+3,j-3)         + &
+         b2(5)*psiTemp(i+3,j-4))*r1_dEtasq
+
+    psiTemp(i+3,j) = r6_5*psiTemp(i+3,j)/(3.0_wp*r1_dXisq  + &
+                       r3_2*r1_dEtasq)                                    
+
+    end do
+
+    i = nXi-2
+
+    psiTemp(i,j) = omega(i,j) + &
+!
+        (a2(1)*psiTemp(i-2,j)+a2(2)*psiTemp(i-1,j)             + &
+         a2(3)*psiTemp(i+1,j)+a2(4)*psiTemp(i+2,j))*r1_dXisq   + &
+!
+        (b2(1)*psiTemp(i,j+1)+b2(2)*psiTemp(i,j-1)             + & 
+         b2(3)*psiTemp(i,j-2)+b2(4)*psiTemp(i,j-3)             + &
+         b2(5)*psiTemp(i,j-4))*r1_dEtasq
+
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(3.0_wp*r1_dXisq + &
+                       r3_2*r1_dEtasq)  
+                
+    ! Region (2) Backward Off-Centre Xi, Backward Off-Centre Eta
+    i = (nXi-1)
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i+1,j)+b2(2)*psiTemp(i-1,j)             + &
+         b2(3)*psiTemp(i-2,j)+b2(4)*psiTemp(i-3,j)             + &
+         b2(5)*psiTemp(i-4,j))*r1_dXisq                        + &
+!
+        (b2(1)*psiTemp(i,j+1)+b2(2)*psiTemp(i,j-1)             + &
+         b2(3)*psiTemp(i,j-2)+b2(4)*psiTemp(i,j-3)             + &
+         b2(5)*psiTemp(i,j-4))*r1_dEtasq
+              
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + &
+                   r3_2*r1_dEtasq)
+
+! Relax Line
+!psiTemp(2:(nXi-1),j) = (1.0_wp-alpha)*psi(2:(nXi-1),j) + &
+!                            alpha*psiTemp(2:(nXi-1),j)
+
+
+    !=============================================================
+
+    !Old Code
+! Region (1) Central Xi, Backward Off-Centre Eta
+       j = (nEta-1)
+    do i = 3,(nXi-2)
+            
+    psiTemp(i,j) = omega(i,j) + &
+!
+        (a2(1)*psiTemp(i-2,j)+a2(2)*psiTemp(i-1,j)+a2(3)*psiTemp(i+1,j) + &
+         a2(4)*psiTemp(i+2,j))*r1_dXisq                                 + &
+!
+        (b2(1)*psiTemp(i,j+1)+b2(2)*psiTemp(i,j-1)+b2(3)*psiTemp(i,j-2) + &
+         b2(4)*psiTemp(i,j-3)+b2(5)*psiTemp(i,j-4))*r1_dEtasq
+
+        psiTemp(i,j) = r6_5*psiTemp(i,j)/(3.0_wp*r1_dXisq + &
+                       r3_2*r1_dEtasq)
+            
+    end do
+
+    ! Region (2) Backward Off-Centre Xi, Backward Off-Centre Eta
+    i = (nXi-1)
+    j = (nEta-1)
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i+1,j)+b2(2)*psiTemp(i-1,j)+b2(3)*psiTemp(i-2,j) + &
+         b2(4)*psiTemp(i-3,j)+b2(5)*psiTemp(i-4,j))*r1_dXisq            + &
+!
+        (b2(1)*psiTemp(i,j+1)+b2(2)*psiTemp(i,j-1)+b2(3)*psiTemp(i,j-2) + &
+         b2(4)*psiTemp(i,j-3)+b2(5)*psiTemp(i,j-4))*r1_dEtasq
+              
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + &
+                   r3_2*r1_dEtasq)
+
+    ! Region (3) Backward Off-Centre Xi, Central Eta
+    i = (nXi-1)
+ do j = 3,(nEta-2)
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i+1,j)+b2(2)*psiTemp(i-1,j)+b2(3)*psiTemp(i-2,j) + &
+         b2(4)*psiTemp(i-3,j)+b2(5)*psiTemp(i-4,j))*r1_dXisq            + &
+!
+        (a2(1)*psiTemp(i,j-2)+a2(2)*psiTemp(i,j-1)+a2(3)*psiTemp(i,j+1) + &
+         a2(4)*psiTemp(i,j+2))*r1_dEtasq                                
+            
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + &
+        3.0_wp*r1_dEtasq)
+
+ end do
+    
+    ! Region (4) Backward Off-Centre Xi, Forward Off-Centre Eta
+    i = (nXi-1)
+    j = 2
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i+1,j)+b2(2)*psiTemp(i-1,j)+b2(3)*psiTemp(i-2,j) + &
+         b2(4)*psiTemp(i-3,j)+b2(5)*psiTemp(i-4,j))*r1_dXisq            + &
+!
+        (b2(1)*psiTemp(i,j-1)+b2(2)*psiTemp(i,j+1)+b2(3)*psiTemp(i,j+2) + &
+         b2(4)*psiTemp(i,j+3)+b2(5)*psiTemp(i,j+4))*r1_dEtasq
+
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + &
+        r3_2*r1_dEtasq)
+            
+    ! Region (5) Central Xi, Forward Off-Centre Eta
+    j = 2
+ do i = 3,(nXi-2)
+            
+    psiTemp(i,j) = omega(i,j) + &
+!
+        (a2(1)*psiTemp(i-2,j)+a2(2)*psiTemp(i-1,j)+a2(3)*psiTemp(i+1,j) + &
+         a2(4)*psiTemp(i+2,j))*r1_dXisq                                 + &
+!
+        (b2(1)*psiTemp(i,j-1)+b2(2)*psiTemp(i,j+1)+b2(3)*psiTemp(i,j+2) + & 
+         b2(4)*psiTemp(i,j+3)+b2(5)*psiTemp(i,j+4))*r1_Detasq
+            
+        psiTemp(i,j) = r6_5*psiTemp(i,j)/(3.0_wp*r1_dXisq + &
+            r3_2*r1_dEtasq)
+
+ end do
+    
+    ! Region (6) Forward Off-Centre Xi, Forward Off-Centre Eta
+    i = 2
+    j = 2
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i-1,j)+b2(2)*psiTemp(i+1,j)+b2(3)*psiTemp(i+2,j) + &
+         b2(4)*psiTemp(i+3,j)+b2(5)*psiTemp(i+4,j))*r1_dXisq            + &
+!
+        (b2(1)*psiTemp(i,j-1)+b2(2)*psiTemp(i,j+1)+b2(3)*psiTemp(i,j+2) + &
+         b2(4)*psiTemp(i,j+3)+b2(5)*psiTemp(i,j+4))*r1_dEtasq
+            
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + & 
+        r3_2*r1_dEtasq)
+
+    ! Region (7) Forward Off-Centre Xi, Central Eta
+    i = 2
+ do j = 3,(nEta-2)
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i-1,j)+b2(2)*psiTemp(i+1,j)+b2(3)*psiTemp(i+2,j) + &
+         b2(4)*psiTemp(i+3,j)+b2(5)*psiTemp(i+4,j))*r1_dXisq            + &
+!
+        (a2(1)*psiTemp(i,j-2)+a2(2)*psiTemp(i,j-1)+a2(3)*psiTemp(i,j+1) + &
+         a2(4)*psiTemp(i,j+2))*r1_dEtasq
+
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + &
+        3.0_wp*r1_dEtasq)
+            
+ end do
+    
+    ! Region (8) Forward Off-Centre Xi, Backward Off-Centre Eta
+    i = 2
+    j = (nEta-1)
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (b2(1)*psiTemp(i-1,j)+b2(2)*psiTemp(i+1,j)+b2(3)*psiTemp(i+2,j) + &
+         b2(4)*psiTemp(i+3,j)+b2(5)*psiTemp(i+4,j))*r1_dXisq            + &
+!
+        (b2(1)*psiTemp(i,j+1)+b2(2)*psiTemp(i,j-1)+b2(3)*psiTemp(i,j-2) + &
+         b2(4)*psiTemp(i,j-3)+b2(5)*psiTemp(i,j-4))*r1_dEtasq
+
+    psiTemp(i,j) = r6_5*psiTemp(i,j)/(r3_2*r1_dXisq + &
+        r3_2*r1_dEtasq)
+
+    ! Region (9) Central Xi, Central Eta
+ do j = 3,(nEta-2)
+    do i = 3,(nXi-2)
+
+            
+    psiTemp(i,j) = omega(i,j) + &
+        (a2(1)*psiTemp(i-2,j)+a2(2)*psiTemp(i-1,j)+a2(3)*psiTemp(i+1,j) + &
+         a2(4)*psiTemp(i+2,j))*r1_dXisq                                 + &
+!
+        (a2(1)*psiTemp(i,j-2)+a2(2)*psiTemp(i,j-1)+a2(3)*psiTemp(i,j+1) + &
+         a2(4)*psiTemp(i,j+2))*r1_dEtasq
+
+    psiTemp(i,j) = r2_5*psiTemp(i,j)/(r1_dXisq + r1_dEtasq)
+            
+    end do
+ end do
